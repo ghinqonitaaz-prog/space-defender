@@ -68,7 +68,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 | **T-03** | Modul Input Username & Leaderboard Top 10 | Phase 2 | `DONE` | AI | LocalStorage CRUD & UI tabel |
 | **T-04** | Logika Pergerakan, Rintangan & Tabrakan | Phase 3 | `DONE` | AI | Core loop & kalkulasi tabrakan AABB |
 | **T-05** | Efek Suara Synth Web Audio API & Partikel | Phase 4 | `DONE` | AI | Audio sintetis & efek partikel ledakan |
-| **T-06** | Deployment GitHub Pages via GitHub CLI (`gh`) | Phase 5 | `TODO` | AI | Publikasi live & verifikasi zero-cache |
+| **T-06** | Deployment GitHub Pages via GitHub CLI (`gh`) | Phase 5 | `DONE` | AI | Repo publik, push main, Pages aktif di `https://ghinqonitaaz-prog.github.io/space-defender/` |
 
 *Status: `TODO` | `IN-PROGRESS` | `DONE`*
 
@@ -79,6 +79,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 | Versi | Tanggal | Pelaksana | Ringkasan Perubahan | Referensi Commit |
 | :--- | :--- | :--- | :--- | :--- |
 | **v0.3.0** | 2026-10-24 | AI | Implementasi game **Space Defender** lengkap dalam `index.html`: 8 blok modular, Web Audio API, LocalStorage leaderboard, tombol sentuh mobile, partikel ledakan, dan loop utama | *(belum di-commit)* |
+| **v0.4.0** | 2026-10-31 | AI | Deployment ke GitHub Pages: inisialisasi git, commit, push ke `ghinqonitaaz-prog/space-defender` (public), aktifkan GitHub Pages branch `main` path `/`, situs live di `https://ghinqonitaaz-prog.github.io/space-defender/` | *(belum di-commit)* |
 | **v0.2.2** | 2026-10-24 | AI | Menambahkan panduan alur integrasi khusus Google AI Studio & penegasan repo wajib Public | `07475fb` |
 | **v0.2.1** | 2026-10-24 | AI | Menambahkan panduan detail aktivasi GitHub Pages (CLI gh api & Web UI visual) serta troubleshooting | `3aaf671` |
 | **v0.2.0** | 2026-10-24 | AI | Konfigurasi ulang ke Single Model AI untuk siswa, modularisasi 8 blok kode, dan penyesuaian matriks tugas | `2954bb0` |
