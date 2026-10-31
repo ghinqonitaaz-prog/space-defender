@@ -7,11 +7,11 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 ## 1. Ikhtisar Game
 
 - **Judul Game**: Space Defender
-- **Genre**: 2D Arcade Game
+- **Genre**: 2D Arcade Game (Shoot 'em Up)
 - **Format**: Single-File HTML (`index.html`) tanpa dependensi eksternal
 - **Platform**: Web Browser (Desktop & Mobile Responsive)
-- **Audio**: Web Audio API Sintetis
-- **Penyimpanan**: LocalStorage (`arcade_leaderboard`, `arcade_last_username`)
+- **Audio**: Web Audio API Sintetis (dapat dimatikan, tersimpan di `arcade_muted`)
+- **Penyimpanan**: LocalStorage (`arcade_leaderboard`, `arcade_last_username`, `arcade_muted`)
 - **Kebijakan Caching**: Zero-Cache (`no-cache, no-store, must-revalidate`)
 - **Deployment**: GitHub Pages (Branch `main`, path `/`)
 
@@ -20,41 +20,52 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 ## 2. Fase Pengembangan Universal
 
 ### Phase 0: Brainstorming & Desain Game
-- [ ] Siswa menentukan ide & tema game (misal: Space Defender, Flappy Arcade, Catch & Dodge, Brick Breaker, Snake).
-- [ ] Menentukan kontrol permainan (Keyboard, Mouse, atau Sentuh).
-- [ ] Menentukan aturan menang/kalah dan sistem penambahan skor.
-- [ ] Menentukan gaya visual (Retro Pixel, Neon Glow, atau Minimalis).
+- [x] Siswa menentukan ide & tema game (Space Defender).
+- [x] Menentukan kontrol permainan (Keyboard + tombol sentuh).
+- [x] Menentukan aturan menang/kalah dan sistem penambahan skor.
+- [x] Menentukan gaya visual (Retro Neon / Space).
 
 ### Phase 1: Setup Single-File `index.html`
-- [ ] Buat kerangka HTML5 dengan meta tag **Zero-Cache**.
-- [ ] Siapkan kanvas responsif dengan rasio layar tetap.
-- [ ] Susun struktur kode modular 8 blok di JavaScript.
-- [ ] Siapkan game loop utama (`requestAnimationFrame`).
+- [x] Buat kerangka HTML5 dengan meta tag **Zero-Cache**.
+- [x] Siapkan kanvas responsif dengan rasio layar tetap (400 × 600).
+- [x] Susun struktur kode modular 8 blok di JavaScript.
+- [x] Siapkan game loop utama (`requestAnimationFrame` + delta time).
 
 ### Phase 2: Username & Leaderboard LocalStorage
-- [ ] Buat modal input username dengan validasi nama (1–15 karakter, anti-XSS).
-- [ ] Simpan dan baca username terakhir dari `arcade_last_username`.
-- [ ] Buat fungsi penyimpanan dan penyortiran Top 10 skor di `arcade_leaderboard`.
-- [ ] Buat tampilan antarmuka (UI) tabel peringkat skor di menu game.
+- [x] Buat modal input username dengan validasi nama (1–15 karakter, anti-XSS).
+- [x] Simpan dan baca username terakhir dari `arcade_last_username`.
+- [x] Buat fungsi penyimpanan dan penyortiran Top 10 skor di `arcade_leaderboard`.
+- [x] Buat tampilan antarmuka (UI) tabel peringkat skor di menu game.
 
 ### Phase 3: Mekanik Inti Permainan (Core Gameplay)
-- [ ] Sistem status game (`MENU`, `PLAYING`, `PAUSED`, `GAMEOVER`).
-- [ ] Karakter pemain (pergerakan dan batas layar).
-- [ ] Rintangan / musuh (kecepatan, variasi, dan pola kemunculan).
-- [ ] Deteksi tabrakan (Collision Detection) dan perhitungan skor.
+- [x] Sistem status game (`MENU`, `PLAYING`, `PAUSED`, `GAMEOVER`).
+- [x] Karakter pemain (pergerakan dan batas layar).
+- [x] Rintangan / musuh (kecepatan, variasi, dan pola kemunculan).
+- [x] Deteksi tabrakan (Collision Detection) dan perhitungan skor.
 
 ### Phase 4: Efek Suara & Visual Juice
-- [ ] Efek suara arcade sintetis dengan Web Audio API (Start, Gerak, Tabrakan, Game Over).
-- [ ] Efek ledakan partikel sederhana saat tabrakan/poin didapat.
-- [ ] Efek getar layar (screen shake) saat game over.
+- [x] Efek suara arcade sintetis dengan Web Audio API (Start, Tembak, Ledakan, Power-up, Game Over).
+- [x] Efek ledakan partikel sederhana saat tabrakan/poin didapat.
+- [x] Efek getar layar (screen shake) saat kehilangan nyawa dan game over.
 
 ### Phase 5: Publikasi GitHub Pages
-- [ ] Inisialisasi git dan branch `main`.
-- [ ] Buat repository GitHub publik via GitHub CLI (`gh repo create <repo> --public --source=. --remote=origin --push`). *Wajib berstatus Public agar GitHub Pages gratis dapat aktif.*
-- [ ] Aktifkan GitHub Pages (Metode CLI `gh api` atau manual via Web UI Settings > Pages branch `main` root `/`).
-- [ ] Kompatibilitas Google AI Studio: Sediakan snippet perintah terminal siap salin jika proyek dilanjutkan lewat antarmuka web.
-- [ ] Pantau status workflow build di tab Actions (`gh run list`).
-- [ ] Tes live demo (`https://<username>.github.io/<repo>/`) dan pastikan pembaruan langsung tampil tanpa hambatan cache (Zero-Cache test).
+- [x] Inisialisasi git dan branch `main`.
+- [x] Buat repository GitHub publik via GitHub CLI (`gh repo create <repo> --public --source=. --remote=origin --push`).
+- [x] Aktifkan GitHub Pages (branch `main`, root `/`).
+- [x] Kompatibilitas Google AI Studio: sediakan snippet perintah terminal siap salin.
+- [x] Pantau status workflow build di tab Actions (`gh run list`).
+- [x] Tes live demo dan pastikan pembaruan langsung tampil (Zero-Cache test).
+
+### Phase 6: Peningkatan Gameplay (Iterasi Lanjutan)
+- [x] Perbaiki layout CSS (body/canvas terpusat, overlay dapat di-scroll, kontrol sentuh hanya di perangkat sentuh).
+- [x] Normalisasi delta-time agar kecepatan game konsisten di monitor 60/120/144 Hz dan saat frame drop.
+- [x] Tambah musuh **UFO** yang bergerak zig-zag dengan skor lebih tinggi.
+- [x] Tambah **power-up** Shield (kebal 6 detik) dan Triple Shot (tembakan 3 arah, 8 detik).
+- [x] Tambah **sistem wave** dengan banner pengumuman dan peningkatan kecepatan/spawn musuh.
+- [x] Tambah pause via tombol HUD, tombol `P`, `ESC`, serta auto-pause saat tab tidak aktif.
+- [x] Tambah toggle SFX (`M` / tombol HUD) yang tersimpan di `arcade_muted`.
+- [x] Tampilkan Rekor (best score) di HUD, highlight skor baru, dan badge "Rekor Baru".
+- [ ] Iterasi berikutnya (ide siswa): boss wave, combo multiplier, atau tema visual baru.
 
 ---
 
@@ -67,8 +78,15 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 | **T-02** | Pembuatan Skeleton `index.html` & Meta Zero-Cache | Phase 1 | `DONE` | AI | 8 blok modular lengkap terpasang |
 | **T-03** | Modul Input Username & Leaderboard Top 10 | Phase 2 | `DONE` | AI | LocalStorage CRUD & UI tabel |
 | **T-04** | Logika Pergerakan, Rintangan & Tabrakan | Phase 3 | `DONE` | AI | Core loop & kalkulasi tabrakan AABB |
-| **T-05** | Efek Suara Synth Web Audio API & Partikel | Phase 4 | `DONE` | AI | Audio sintetis & efek partikel ledakan |
-| **T-06** | Deployment GitHub Pages via GitHub CLI (`gh`) | Phase 5 | `DONE` | AI | Repo publik, push main, Pages aktif di `https://ghinqonitaaz-prog.github.io/space-defender/` |
+| **T-05** | Efek Suara Synth Web Audio API & Partikel | Phase 4 | `DONE` | AI | Audio sintetis, partikel, screen shake |
+| **T-06** | Deployment GitHub Pages via GitHub CLI (`gh`) | Phase 5 | `DONE` | AI | Live di `https://ghinqonitaaz-prog.github.io/space-defender/` |
+| **T-07** | Perbaikan layout CSS & overlay responsif | Phase 6 | `DONE` | AI | Body flex center, kartu menu scrollable di layar kecil |
+| **T-08** | Delta-time normalization pada game loop | Phase 6 | `DONE` | AI | Kecepatan konsisten di semua refresh rate |
+| **T-09** | Musuh UFO zig-zag + skor 50 | Phase 6 | `DONE` | AI | Variasi musuh kedua |
+| **T-10** | Power-up Shield & Triple Shot | Phase 6 | `DONE` | AI | Drop dari UFO (70%) dan alien biasa (9%) |
+| **T-11** | Sistem Wave & peningkatan kesulitan | Phase 6 | `DONE` | AI | Tiap 10 kill, banner + speed naik |
+| **T-12** | Pause (tombol/P/ESC/auto) & toggle SFX | Phase 6 | `DONE` | AI | Preferensi mute tersimpan |
+| **T-13** | HUD Rekor, highlight skor baru & badge rekor | Phase 6 | `DONE` | AI | `getBestScore()` + `lastSavedId` |
 
 *Status: `TODO` | `IN-PROGRESS` | `DONE`*
 
@@ -78,8 +96,9 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 
 | Versi | Tanggal | Pelaksana | Ringkasan Perubahan | Referensi Commit |
 | :--- | :--- | :--- | :--- | :--- |
-| **v0.3.0** | 2026-10-24 | AI | Implementasi game **Space Defender** lengkap dalam `index.html`: 8 blok modular, Web Audio API, LocalStorage leaderboard, tombol sentuh mobile, partikel ledakan, dan loop utama | *(belum di-commit)* |
-| **v0.4.0** | 2026-10-31 | AI | Deployment ke GitHub Pages: inisialisasi git, commit, push ke `ghinqonitaaz-prog/space-defender` (public), aktifkan GitHub Pages branch `main` path `/`, situs live di `https://ghinqonitaaz-prog.github.io/space-defender/` | *(belum di-commit)* |
+| **v0.5.0** | 2026-10-31 | AI | Perbaikan layout CSS, delta-time normalization, musuh UFO, power-up Shield & Triple Shot, sistem wave, pause (tombol/P/ESC/auto), toggle SFX, HUD rekor, highlight skor baru, dan badge REKOR BARU | *(commit ini)* |
+| **v0.4.0** | 2026-10-31 | AI | Deployment ke GitHub Pages: inisialisasi git, commit, push ke `ghinqonitaaz-prog/space-defender` (public), aktifkan GitHub Pages branch `main` path `/`, situs live di `https://ghinqonitaaz-prog.github.io/space-defender/` | `841e2ad` |
+| **v0.3.0** | 2026-10-24 | AI | Implementasi game **Space Defender** lengkap dalam `index.html`: 8 blok modular, Web Audio API, LocalStorage leaderboard, tombol sentuh mobile, partikel ledakan, dan loop utama | `551fc22` |
 | **v0.2.2** | 2026-10-24 | AI | Menambahkan panduan alur integrasi khusus Google AI Studio & penegasan repo wajib Public | `07475fb` |
 | **v0.2.1** | 2026-10-24 | AI | Menambahkan panduan detail aktivasi GitHub Pages (CLI gh api & Web UI visual) serta troubleshooting | `3aaf671` |
 | **v0.2.0** | 2026-10-24 | AI | Konfigurasi ulang ke Single Model AI untuk siswa, modularisasi 8 blok kode, dan penyesuaian matriks tugas | `2954bb0` |
