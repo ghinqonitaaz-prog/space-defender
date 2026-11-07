@@ -85,6 +85,13 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 - [x] Palet warna digeser ke ungu: latar, HUD, tombol, jet, UFO, power-up, banner, dan bintang.
 - [x] Uji: UFO lolos tanpa penalti, tabrakan saat mode kebal aman, skor mode kebal tidak tersimpan.
 
+### Phase 9: Tembakan 3 Peluru (v0.8.0)
+- [x] Tembakan dasar menjadi 3 peluru per voli (kiri, tengah, kanan) tanpa perlu power-up.
+- [x] Power-up `spread` (sebelumnya Triple Shot) meningkatkan voli menjadi 5 peluru kipas selama 8 detik.
+- [x] HUD menampilkan status `SPREAD <detik>` saat power-up aktif; ikon power-up berubah menjadi `W`.
+- [x] Sesuaikan sudut sebar peluru agar 3 peluru tetap efektif di seluruh lebar layar.
+- [x] Uji: satu klik tembak menghasilkan 3 peluru, power-up menghasilkan 5 peluru, tanpa error runtime.
+
 ---
 
 ## 3. Matriks Tugas & Status Pelaksanaan
@@ -111,6 +118,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 | **T-17** | Musuh lolos tidak mengurangi nyawa | Phase 8 | `DONE` | AI | Penalti bawah layar dihapus |
 | **T-18** | Ghost Mode = mode kebal | Phase 8 | `DONE` | AI | Toggle `G`, HUD `∞`, skor tidak masuk peringkat |
 | **T-19** | Palet warna ungu | Phase 8 | `DONE` | AI | CSS + canvas (jet, UFO, power-up, banner) |
+| **T-20** | Tembakan dasar 3 peluru + spread 5 peluru | Phase 9 | `DONE` | AI | `fire()`: 3 peluru default, 5 saat power-up |
 
 *Status: `TODO` | `IN-PROGRESS` | `DONE`*
 
@@ -120,6 +128,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 
 | Versi | Tanggal | Pelaksana | Ringkasan Perubahan | Referensi Commit |
 | :--- | :--- | :--- | :--- | :--- |
+| **v0.8.0** | 2026-11-07 | AI | Tembakan dasar menjadi 3 peluru per voli; power-up Triple Shot diganti menjadi Spread 5 peluru dengan ikon `W` dan status HUD `SPREAD` | *(commit ini)* |
 | **v0.7.0** | 2026-11-07 | AI | Semua musuh menjadi UFO; musuh yang lolos tidak lagi mengurangi nyawa; Ghost Mode diubah menjadi mode kebal (HUD `∞`, pesawat transparan, skor tidak masuk peringkat); palet warna digeser ke ungu | *(commit ini)* |
 | **v0.6.0** | 2026-11-07 | AI | Ghost replay (rekam & putar ulang run terbaik, simpan di `arcade_ghost_v1`, toggle `G`, info ghost di menu) dan desain ulang pemain menjadi jet tempur (sayap swept, kanopi, rudal, afterburner, lampu navigasi, banking, trail mesin) | *(commit ini)* |
 | **v0.5.0** | 2026-10-31 | AI | Perbaikan layout CSS, delta-time normalization, musuh UFO, power-up Shield & Triple Shot, sistem wave, pause (tombol/P/ESC/auto), toggle SFX, HUD rekor, highlight skor baru, dan badge REKOR BARU | *(commit ini)* |

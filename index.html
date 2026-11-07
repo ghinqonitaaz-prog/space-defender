@@ -330,7 +330,7 @@
   let waveBanner = 0;
   let shake = 0;
   let shieldTime = 0;
-  let tripleTime = 0;
+  let spreadTime = 0;
   let newRecord = false;
   let lastSavedId = null;
 
@@ -398,12 +398,18 @@
   }
 
   function fire() {
-    if (tripleTime > 0) {
-      bullets.push(makeBullet(-8, -1.4));
+    if (spreadTime > 0) {
+      // Power-up spread: 5 peluru kipas
+      bullets.push(makeBullet(-12, -1.8));
+      bullets.push(makeBullet(-6, -0.9));
       bullets.push(makeBullet(0, 0));
-      bullets.push(makeBullet(8, 1.4));
+      bullets.push(makeBullet(6, 0.9));
+      bullets.push(makeBullet(12, 1.8));
     } else {
+      // Tembakan dasar: 3 peluru per voli
+      bullets.push(makeBullet(-8, -1.2));
       bullets.push(makeBullet(0, 0));
+      bullets.push(makeBullet(8, 1.2));
     }
     playSound('shoot');
   }
@@ -450,7 +456,7 @@
       h: 20,
       vy: 1.6,
       rot: 0,
-      type: Math.random() < 0.5 ? 'shield' : 'triple'
+      type: Math.random() < 0.5 ? 'shield' : 'spread'
     });
   }
 
@@ -559,7 +565,7 @@
     waveBanner = 0;
     shake = 0;
     shieldTime = 0;
-    tripleTime = 0;
+    spreadTime = 0;
     newRecord = false;
     lastSavedId = null;
     bullets = [];
@@ -655,7 +661,7 @@
     const parts = [];
     if (ghostEnabled) parts.push('MODE KEBAL');
     if (shieldTime > 0) parts.push('SHIELD ' + Math.ceil(shieldTime) + 's');
-    if (tripleTime > 0) parts.push('TRIPLE ' + Math.ceil(tripleTime) + 's');
+    if (spreadTime > 0) parts.push('SPREAD ' + Math.ceil(spreadTime) + 's');
     const txt = parts.join('  |  ');
     if (hudStatus.textContent !== txt) hudStatus.textContent = txt;
   }
@@ -714,7 +720,7 @@
     }
 
     shieldTime = Math.max(0, shieldTime - dt);
-    tripleTime = Math.max(0, tripleTime - dt);
+    spreadTime = Math.max(0, spreadTime - dt);
     shootCooldown -= dt;
 
     if ((keys['Space'] || touchShoot) && shootCooldown <= 0) {
@@ -808,7 +814,7 @@
       }
       if (rectCollide(p, player)) {
         if (p.type === 'shield') shieldTime = 6;
-        else tripleTime = 8;
+        else spreadTime = 8;
         spawnParticles(p.x + p.w / 2, p.y + p.h / 2, p.type === 'shield' ? '#a78bfa' : '#f472b6', 12);
         playSound('power');
         powerups.splice(i, 1);
@@ -1238,7 +1244,7 @@
     ctx.font = 'bold 11px Segoe UI, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(p.type === 'shield' ? 'S' : 'T', cx, cy + 1);
+    ctx.fillText(p.type === 'shield' ? 'S' : 'W', cx, cy + 1);
     ctx.textAlign = 'start';
     ctx.textBaseline = 'alphabetic';
   }
