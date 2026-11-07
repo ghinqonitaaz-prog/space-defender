@@ -11,7 +11,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 - **Format**: Single-File HTML (`index.html`) tanpa dependensi eksternal
 - **Platform**: Web Browser (Desktop & Mobile Responsive)
 - **Audio**: Web Audio API Sintetis (dapat dimatikan, tersimpan di `arcade_muted`)
-- **Penyimpanan**: LocalStorage (`arcade_leaderboard`, `arcade_last_username`, `arcade_muted`, `arcade_ghost_v1`, `arcade_ghost_enabled`)
+- **Penyimpanan**: LocalStorage (`arcade_leaderboard`, `arcade_last_username`, `arcade_muted`, `arcade_ghost_v1`, `arcade_ghost_mode`)
 - **Kebijakan Caching**: Zero-Cache (`no-cache, no-store, must-revalidate`)
 - **Deployment**: GitHub Pages (Branch `main`, path `/`)
 
@@ -69,13 +69,21 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 
 ### Phase 7: Ghost Replay & Pesawat Tempur (v0.6.0)
 - [x] Rekam gerak pemain + status tembakan run terbaik (sampel 10×/detik) selama bermain.
-- [x] Simpan ghost ke `arcade_ghost_v1` hanya jika skor run baru mengalahkan ghost sebelumnya.
-- [x] Putar ulang ghost sebagai jet transparan + label `GHOST <skor>` selama run berikutnya.
-- [x] Toggle ghost lewat tombol HUD atau tombol `G`, preferensi disimpan di `arcade_ghost_enabled`.
-- [x] Tampilkan info ghost terbaik (nama, skor, wave) di menu utama.
+- [x] Simpan replay ke `arcade_ghost_v1` hanya jika skor run baru mengalahkan replay sebelumnya.
+- [x] Putar ulang rekaman sebagai jet transparan + label `REPLAY <skor>` selama run berikutnya.
+- [x] Tampilkan info replay terbaik (nama, skor, wave) di menu utama.
 - [x] Desain ulang pemain menjadi jet tempur: badan logam, sayap swept, kanopi, rudal, afterburner, lampu navigasi.
 - [x] Efek *banking* saat bermanuver, trail mesin, dan partikel asap/nyala.
 - [x] Uji replay lintas reload browser (LocalStorage) dan pastikan tidak ada error runtime.
+
+### Phase 8: UFO, Mode Kebal & Tema Ungu (v0.7.0)
+- [x] Semua musuh diganti menjadi UFO (piringan + kubah + lampu rim), tanpa musuh segitiga.
+- [x] Musuh yang lolos ke bawah layar tidak lagi mengurangi nyawa — dibiarkan lewat.
+- [x] Mode kebal (Ghost Mode): tombol `G`/HUD membuat pesawat menembus UFO tanpa kehilangan nyawa.
+- [x] Saat mode kebal aktif: HUD menampilkan `NYAWA ∞` dan status `MODE KEBAL`, pesawat tampil transparan dengan aura.
+- [x] Run dengan mode kebal tidak masuk leaderboard dan tidak menyimpan replay (ditandai di layar Game Over).
+- [x] Palet warna digeser ke ungu: latar, HUD, tombol, jet, UFO, power-up, banner, dan bintang.
+- [x] Uji: UFO lolos tanpa penalti, tabrakan saat mode kebal aman, skor mode kebal tidak tersimpan.
 
 ---
 
@@ -99,6 +107,10 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 | **T-13** | HUD Rekor, highlight skor baru & badge rekor | Phase 6 | `DONE` | AI | `getBestScore()` + `lastSavedId` |
 | **T-14** | Ghost replay (rekam, simpan, putar ulang run terbaik) | Phase 7 | `DONE` | AI | `arcade_ghost_v1`, sampel 10 Hz, toggle `G` |
 | **T-15** | Desain ulang pesawat tempur + efeks visual | Phase 7 | `DONE` | AI | Jet vektor, banking, afterburner, trail mesin |
+| **T-16** | Semua musuh menjadi UFO | Phase 8 | `DONE` | AI | Piringan + kubah + lampu rim |
+| **T-17** | Musuh lolos tidak mengurangi nyawa | Phase 8 | `DONE` | AI | Penalti bawah layar dihapus |
+| **T-18** | Ghost Mode = mode kebal | Phase 8 | `DONE` | AI | Toggle `G`, HUD `∞`, skor tidak masuk peringkat |
+| **T-19** | Palet warna ungu | Phase 8 | `DONE` | AI | CSS + canvas (jet, UFO, power-up, banner) |
 
 *Status: `TODO` | `IN-PROGRESS` | `DONE`*
 
@@ -108,6 +120,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 
 | Versi | Tanggal | Pelaksana | Ringkasan Perubahan | Referensi Commit |
 | :--- | :--- | :--- | :--- | :--- |
+| **v0.7.0** | 2026-11-07 | AI | Semua musuh menjadi UFO; musuh yang lolos tidak lagi mengurangi nyawa; Ghost Mode diubah menjadi mode kebal (HUD `∞`, pesawat transparan, skor tidak masuk peringkat); palet warna digeser ke ungu | *(commit ini)* |
 | **v0.6.0** | 2026-11-07 | AI | Ghost replay (rekam & putar ulang run terbaik, simpan di `arcade_ghost_v1`, toggle `G`, info ghost di menu) dan desain ulang pemain menjadi jet tempur (sayap swept, kanopi, rudal, afterburner, lampu navigasi, banking, trail mesin) | *(commit ini)* |
 | **v0.5.0** | 2026-10-31 | AI | Perbaikan layout CSS, delta-time normalization, musuh UFO, power-up Shield & Triple Shot, sistem wave, pause (tombol/P/ESC/auto), toggle SFX, HUD rekor, highlight skor baru, dan badge REKOR BARU | *(commit ini)* |
 | **v0.4.0** | 2026-10-31 | AI | Deployment ke GitHub Pages: inisialisasi git, commit, push ke `ghinqonitaaz-prog/space-defender` (public), aktifkan GitHub Pages branch `main` path `/`, situs live di `https://ghinqonitaaz-prog.github.io/space-defender/` | `841e2ad` |

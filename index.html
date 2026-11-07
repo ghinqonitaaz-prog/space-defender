@@ -11,8 +11,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
     body {
-      background: radial-gradient(circle at 50% 0%, #0b1024 0%, #05050a 60%);
-      color: #e0e0ff;
+      background: radial-gradient(circle at 50% 0%, #170b2e 0%, #06030d 60%);
+      color: #e6ddff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow: hidden;
       display: flex;
@@ -23,53 +23,53 @@
     .game-wrap { position: relative; }
     canvas {
       display: block; background: #000;
-      box-shadow: 0 0 40px rgba(0,255,200,0.15);
+      box-shadow: 0 0 40px rgba(168,85,247,0.18);
       max-width: 100%; max-height: 100vh; border-radius: 8px;
     }
     .hidden { display: none !important; }
     .ui-overlay {
       position: absolute; inset: 0; width: 100%; height: 100%;
-      background: rgba(5,5,10,0.85); display: flex; flex-direction: column;
+      background: rgba(8,4,16,0.86); display: flex; flex-direction: column;
       align-items: center; justify-content: flex-start; overflow-y: auto;
-      padding: 16px; z-index: 10; border-radius: 8px; touch-action: pan-y;
+      padding: 48px 16px 16px; z-index: 10; border-radius: 8px; touch-action: pan-y;
     }
     .ui-overlay.hidden { display: none; }
     .ui-card {
-      background: #11131d; padding: 24px; border-radius: 16px;
-      border: 2px solid #00d2ff; box-shadow: 0 0 30px rgba(0,210,255,0.25);
+      background: #150f24; padding: 24px; border-radius: 16px;
+      border: 2px solid #a855f7; box-shadow: 0 0 30px rgba(168,85,247,0.28);
       text-align: center; max-width: 340px; width: 100%; margin: auto;
     }
     h1 { font-size: 28px; margin-bottom: 8px; text-transform: uppercase;
-      letter-spacing: 3px; color: #00d2ff; text-shadow: 0 0 10px rgba(0,210,255,0.6); }
-    h2 { font-size: 16px; margin: 16px 0 8px; color: #00d2ff; }
-    p { font-size: 13px; color: #b0b0c8; margin-bottom: 14px; line-height: 1.5; }
+      letter-spacing: 3px; color: #c084fc; text-shadow: 0 0 10px rgba(192,132,252,0.65); }
+    h2 { font-size: 16px; margin: 16px 0 8px; color: #c084fc; }
+    p { font-size: 13px; color: #b9aecf; margin-bottom: 14px; line-height: 1.5; }
     input[type="text"] {
-      width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333;
-      background: #0a0c14; color: #fff; font-size: 16px; margin-bottom: 12px;
+      width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #3b2a55;
+      background: #0d0818; color: #fff; font-size: 16px; margin-bottom: 12px;
       text-transform: uppercase; outline: none; }
-    input[type="text"]:focus { border-color: #00d2ff; }
-    input[type="text"]::placeholder { color: #666; }
+    input[type="text"]:focus { border-color: #a855f7; }
+    input[type="text"]::placeholder { color: #6b5b85; }
     button {
       padding: 11px 22px; font-size: 15px; font-weight: bold; border: none;
-      border-radius: 6px; cursor: pointer; background: #00d2ff; color: #000;
+      border-radius: 6px; cursor: pointer; background: #a855f7; color: #0a0514;
       transition: transform 0.1s, box-shadow 0.1s; text-transform: uppercase;
       font-family: inherit; }
-    button:hover { background: #40e0ff; box-shadow: 0 0 15px rgba(0,210,255,0.5); }
+    button:hover { background: #c084fc; box-shadow: 0 0 15px rgba(168,85,247,0.55); }
     button:active { transform: scale(0.96); }
-    button.secondary { background: #555a70; color: #fff; }
-    button.secondary:hover { background: #6f7690; box-shadow: none; }
+    button.secondary { background: #4b3a66; color: #fff; }
+    button.secondary:hover { background: #5f4a80; box-shadow: none; }
     .leaderboard-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 12px; }
     .leaderboard-table th, .leaderboard-table td {
-      border: 1px solid #333; padding: 5px 6px; text-align: center; }
-    .leaderboard-table th { background: #00d2ff; color: #000; }
-    .leaderboard-table tr:nth-child(even) td { background: #1a1c28; }
-    .leaderboard-table tr.new-row td { background: rgba(0,210,255,0.18); color: #fff; font-weight: bold; }
-    .empty-msg { display: none; font-size: 11px; color: #666; margin: 6px 0; }
-    .hint { font-size: 11px; color: #7a7a99; margin-top: 12px; margin-bottom: 0; }
+      border: 1px solid #3b2a55; padding: 5px 6px; text-align: center; }
+    .leaderboard-table th { background: #a855f7; color: #0a0514; }
+    .leaderboard-table tr:nth-child(even) td { background: #191226; }
+    .leaderboard-table tr.new-row td { background: rgba(168,85,247,0.22); color: #fff; font-weight: bold; }
+    .empty-msg { display: none; font-size: 11px; color: #6b5b85; margin: 6px 0; }
+    .hint { font-size: 11px; color: #8b7aa8; margin-top: 12px; margin-bottom: 0; }
     .ghost-info {
-      font-size: 11px; color: #7fe9ff; margin: 4px 0 0; padding: 6px 8px;
-      border: 1px dashed rgba(0,210,255,0.35); border-radius: 6px;
-      background: rgba(0,210,255,0.06); letter-spacing: 0.5px; }
+      font-size: 11px; color: #d8b4fe; margin: 4px 0 0; padding: 6px 8px;
+      border: 1px dashed rgba(168,85,247,0.35); border-radius: 6px;
+      background: rgba(168,85,247,0.07); letter-spacing: 0.5px; }
     .icon-btn.off { opacity: 0.5; }
     .record-badge {
       display: inline-block; margin-top: 4px; padding: 4px 10px; border-radius: 999px;
@@ -79,20 +79,20 @@
     @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
     #hud {
       position: absolute; top: 12px; left: 12px; font-size: 12px;
-      font-weight: bold; color: #7fe9ff; text-shadow: 0 0 6px rgba(0,210,255,0.6);
+      font-weight: bold; color: #d8b4fe; text-shadow: 0 0 6px rgba(168,85,247,0.6);
       pointer-events: none; z-index: 5; line-height: 1.6; letter-spacing: 1px; }
     #hud .stat { display: block; }
     #hud b { color: #fff; }
-    #hud .status { color: #ff66ff; text-shadow: 0 0 6px rgba(255,102,255,0.6); }
+    #hud .status { color: #f472b6; text-shadow: 0 0 6px rgba(244,114,182,0.6); }
     .hud-actions {
       position: absolute; top: 12px; right: 12px; display: flex; gap: 6px;
       z-index: 20; }
     .icon-btn {
       padding: 5px 9px; font-size: 10px; letter-spacing: 1px;
-      background: rgba(0,210,255,0.12); color: #7fe9ff;
-      border: 1px solid rgba(0,210,255,0.45); border-radius: 6px;
+      background: rgba(168,85,247,0.12); color: #d8b4fe;
+      border: 1px solid rgba(168,85,247,0.45); border-radius: 6px;
       text-transform: uppercase; font-weight: bold; }
-    .icon-btn:hover { background: rgba(0,210,255,0.3); color: #fff; box-shadow: none; }
+    .icon-btn:hover { background: rgba(168,85,247,0.3); color: #fff; box-shadow: none; }
     .touch-controls {
       position: absolute; bottom: 22px; left: 0; right: 0;
       display: flex; justify-content: center; gap: 24px; z-index: 5;
@@ -102,7 +102,7 @@
       background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.28);
       color: #fff; font-size: 24px; display: flex; align-items: center; justify-content: center;
       user-select: none; -webkit-user-select: none; pointer-events: auto; }
-    .touch-btn:active { background: rgba(0,210,255,0.3); border-color: #00d2ff; }
+    .touch-btn:active { background: rgba(168,85,247,0.32); border-color: #a855f7; }
     @media (hover: hover) and (pointer: fine) {
       .touch-controls { display: none; }
     }
@@ -119,7 +119,7 @@
       <span class="stat status" id="hudStatus"></span>
     </div>
     <div class="hud-actions">
-      <button id="btnGhost" class="icon-btn" type="button">GHOST: ON</button>
+      <button id="btnGhost" class="icon-btn" type="button" title="Mode kebal &mdash; skor tidak dihitung">GHOST: OFF</button>
       <button id="btnMute" class="icon-btn" type="button">SFX: ON</button>
       <button id="btnPause" class="icon-btn hidden" type="button">PAUSE</button>
     </div>
@@ -127,11 +127,11 @@
     <div id="uiMenu" class="ui-overlay">
       <div class="ui-card">
         <h1>Space Defender</h1>
-        <p>Tembak alien sebelum mereka mencapai Bumi!</p>
+        <p>Tembak UFO untuk skor &mdash; yang lolos biarkan lewat!</p>
         <div id="usernameBox" style="margin-bottom: 12px;">
-          <label style="display:block; font-size:12px; margin-bottom:6px; color:#00d2ff; letter-spacing:1px;">NAMA PEMAIN</label>
+          <label style="display:block; font-size:12px; margin-bottom:6px; color:#c084fc; letter-spacing:1px;">NAMA PEMAIN</label>
           <input type="text" id="inpUsername" maxlength="15" placeholder="Masukkan nama (1-15)">
-          <div id="usernameError" style="color:#ff4444; font-size:11px; margin-top:-6px; margin-bottom:8px; display:none;"></div>
+          <div id="usernameError" style="color:#ff6b8a; font-size:11px; margin-top:-6px; margin-bottom:8px; display:none;"></div>
         </div>
         <button id="btnStart">Mulai Permainan</button>
         <button id="btnChangeName" class="secondary" style="margin-top:8px;">Ganti Nama</button>
@@ -142,15 +142,16 @@
         </table>
         <p class="empty-msg">Belum ada skor. Jadilah yang pertama!</p>
         <p id="ghostInfo" class="ghost-info"></p>
-        <p class="hint">Kontrol: &larr; &rarr; / A D untuk bergerak &middot; SPACE untuk menembak &middot; P / ESC untuk pause</p>
+        <p class="hint">Kontrol: &larr; &rarr; / A D &middot; SPACE menembak &middot; P / ESC pause &middot; G mode kebal (skor tidak dihitung)</p>
       </div>
     </div>
 
     <div id="uiGameOver" class="ui-overlay hidden">
       <div class="ui-card">
-        <h1 style="color:#ff4444;">Game Over</h1>
+        <h1 style="color:#f472b6;">Game Over</h1>
         <div class="score-box">Skor Akhir: <span id="goScore">0</span></div>
         <div id="goRecord" class="record-badge hidden">REKOR BARU!</div>
+        <div id="goGhostNote" class="ghost-info hidden" style="margin-top:8px;">Mode kebal aktif &mdash; skor tidak masuk peringkat.</div>
         <div style="margin-top:14px;">
           <button id="btnPlayAgain">Main Lagi</button>
           <button id="btnGoMenu" class="secondary" style="margin-top:8px;">Kembali ke Menu</button>
@@ -206,10 +207,8 @@
   const BULLET_W = 4;
   const BULLET_H = 15;
   const BULLET_SPEED = 8;
-  const ALIEN_W = 30;
-  const ALIEN_H = 20;
-  const UFO_W = 36;
-  const UFO_H = 18;
+  const UFO_W = 38;
+  const UFO_H = 20;
   const MAX_LIVES = 3;
   const KILLS_PER_WAVE = 10;
   const INITIAL_ALIEN_SPEED = 1.8;
@@ -223,8 +222,8 @@
     CANVAS_W / 2, CANVAS_H * 0.12, 20,
     CANVAS_W / 2, CANVAS_H * 0.6, CANVAS_H
   );
-  BG_GRADIENT.addColorStop(0, '#0a1428');
-  BG_GRADIENT.addColorStop(1, '#000000');
+  BG_GRADIENT.addColorStop(0, '#1b0f33');
+  BG_GRADIENT.addColorStop(1, '#04010a');
 
   let time = 0;
   const stars = [];
@@ -235,7 +234,7 @@
       z: 0.4 + Math.random() * 1.2,
       tw: 0.5 + Math.random() * 2.5,
       ph: Math.random() * Math.PI * 2,
-      c: Math.random() < 0.25 ? '#9fe8ff' : '#ffffff'
+      c: Math.random() < 0.25 ? '#c9a8ff' : '#ffffff'
     });
   }
 
@@ -352,7 +351,8 @@
   let ghostShootTimer = 0;
   let bankAngle = 0;
   let ghostData = loadGhost();
-  let ghostEnabled = localStorage.getItem('arcade_ghost_enabled') !== '0';
+  let ghostEnabled = localStorage.getItem('arcade_ghost_mode') === '1';
+  let usedGhostMode = false;
 
   let currentUsername = localStorage.getItem('arcade_last_username') || '';
 
@@ -369,6 +369,7 @@
   const hudStatus = document.getElementById('hudStatus');
   const goScore = document.getElementById('goScore');
   const goRecord = document.getElementById('goRecord');
+  const goGhostNote = document.getElementById('goGhostNote');
   const btnStart = document.getElementById('btnStart');
   const btnChangeName = document.getElementById('btnChangeName');
   const btnPlayAgain = document.getElementById('btnPlayAgain');
@@ -408,23 +409,22 @@
   }
 
   function spawnAlien() {
-    const isUfo = Math.random() < Math.min(0.3, 0.12 + wave * 0.015);
-    const w = isUfo ? UFO_W : ALIEN_W;
-    const h = isUfo ? UFO_H : ALIEN_H;
-    const amp = isUfo ? 40 : 0;
-    const margin = amp + 10;
+    const w = UFO_W;
+    const h = UFO_H;
+    const amp = 38;
+    const margin = amp + w / 2 + 8;
     const baseX = margin + Math.random() * Math.max(1, CANVAS_W - w - margin * 2);
     aliens.push({
-      type: isUfo ? 'ufo' : 'grunt',
+      type: 'ufo',
       x: baseX,
       baseX: baseX,
       y: -h,
       w: w,
       h: h,
-      speed: alienSpeed * (isUfo ? 1.55 : 1) * (0.85 + Math.random() * 0.3),
+      speed: alienSpeed * (0.9 + Math.random() * 0.25),
       phase: Math.random() * Math.PI * 2,
       amp: amp,
-      points: isUfo ? 50 : 20
+      points: 50
     });
   }
 
@@ -488,8 +488,10 @@
 
   function toggleGhost() {
     ghostEnabled = !ghostEnabled;
-    localStorage.setItem('arcade_ghost_enabled', ghostEnabled ? '1' : '0');
+    localStorage.setItem('arcade_ghost_mode', ghostEnabled ? '1' : '0');
+    if (ghostEnabled && gameState === STATE.PLAYING) usedGhostMode = true;
     updateGhostUI();
+    updateHUD();
   }
 
   function updateGhostUI() {
@@ -498,18 +500,18 @@
     btnGhost.classList.toggle('off', !ghostEnabled);
     if (!ghostInfo) return;
     if (ghostData && ghostData.samples) {
-      ghostInfo.textContent = 'Ghost terbaik: ' + ghostData.name + ' — ' +
+      ghostInfo.textContent = 'Replay terbaik: ' + ghostData.name + ' - ' +
         Number(ghostData.score || 0).toLocaleString('id-ID') +
         ' (wave ' + (ghostData.wave || 1) + ')';
     } else {
-      ghostInfo.textContent = 'Belum ada ghost — skor terbaikmu akan direkam otomatis.';
+      ghostInfo.textContent = 'Belum ada replay - skor terbaikmu akan direkam otomatis.';
     }
   }
 
   function updateGhost(dt) {
     ghostVisible = false;
     const g = ghostData;
-    if (!ghostEnabled || !g || !g.samples || g.samples.length < 2) return;
+    if (!g || !g.samples || g.samples.length < 2) return;
     if (runTime > g.duration + 2.5) return;
 
     while (ghostPlayIdx < g.samples.length - 2 && g.samples[ghostPlayIdx + 1][0] <= runTime) {
@@ -573,6 +575,7 @@
     ghostAlpha = 1;
     ghostShootTimer = 0;
     bankAngle = 0;
+    usedGhostMode = ghostEnabled;
     resetPlayer();
     localStorage.setItem('arcade_last_username', currentUsername);
     gameState = STATE.PLAYING;
@@ -589,10 +592,16 @@
     btnPause.classList.add('hidden');
     hud.classList.add('hidden');
     playSound('gameover');
-    const prevBest = getBestScore();
-    newRecord = score > prevBest && score > 0;
-    saveScoreToLeaderboard();
-    saveGhost();
+    if (usedGhostMode) {
+      newRecord = false;
+      goGhostNote.classList.remove('hidden');
+    } else {
+      const prevBest = getBestScore();
+      newRecord = score > prevBest && score > 0;
+      saveScoreToLeaderboard();
+      saveGhost();
+      goGhostNote.classList.add('hidden');
+    }
     updateGhostUI();
     goScore.textContent = score;
     goRecord.classList.toggle('hidden', !newRecord);
@@ -615,14 +624,10 @@
 
   function destroyAlien(index) {
     const a = aliens[index];
-    spawnParticles(
-      a.x + a.w / 2, a.y + a.h / 2,
-      a.type === 'ufo' ? '#ffcc00' : '#ff4444',
-      a.type === 'ufo' ? 16 : 10
-    );
+    spawnParticles(a.x + a.w / 2, a.y + a.h / 2, '#ff8ad8', 14);
     score += a.points;
     kills++;
-    maybeDropPowerup(a.x + a.w / 2, a.y + a.h / 2, a.type === 'ufo' ? 0.7 : 0.09);
+    maybeDropPowerup(a.x + a.w / 2, a.y + a.h / 2, 0.14);
     aliens.splice(index, 1);
     playSound('explosion');
     checkWave();
@@ -640,13 +645,15 @@
 
   function updateHUD() {
     hudScore.textContent = score;
-    hudBest.textContent = Math.max(getBestScore(), score);
-    hudLives.textContent = lives;
+    hudBest.textContent = Math.max(getBestScore(), usedGhostMode ? 0 : score);
+    hudLives.textContent = ghostEnabled ? '\u221E' : lives;
     hudWave.textContent = wave;
+    refreshStatus();
   }
 
   function refreshStatus() {
     const parts = [];
+    if (ghostEnabled) parts.push('MODE KEBAL');
     if (shieldTime > 0) parts.push('SHIELD ' + Math.ceil(shieldTime) + 's');
     if (tripleTime > 0) parts.push('TRIPLE ' + Math.ceil(tripleTime) + 's');
     const txt = parts.join('  |  ');
@@ -752,12 +759,20 @@
       }
 
       if (rectCollide(a, player)) {
+        if (ghostEnabled) {
+          // Mode kebal: UFO menembus pesawat tanpa mengurangi nyawa.
+          if (!a.ghostTouched) {
+            a.ghostTouched = true;
+            spawnParticles(player.x + PLAYER_W / 2, player.y + PLAYER_H / 2, '#d8b4fe', 4);
+          }
+          continue;
+        }
         if (shieldTime > 0) {
           destroyAlien(i);
           shake = Math.max(shake, 6);
           if (gameState !== STATE.PLAYING) return;
         } else {
-          spawnParticles(player.x + PLAYER_W / 2, player.y + PLAYER_H / 2, '#ff4444', 14);
+          spawnParticles(player.x + PLAYER_W / 2, player.y + PLAYER_H / 2, '#ff6bd6', 14);
           aliens.splice(i, 1);
           loseLife();
           if (gameState !== STATE.PLAYING) return;
@@ -765,10 +780,9 @@
         continue;
       }
 
+      // Musuh yang lolos ke bawah dibiarkan lewat — tidak mengurangi nyawa.
       if (a.y > CANVAS_H) {
         aliens.splice(i, 1);
-        loseLife();
-        if (gameState !== STATE.PLAYING) return;
         continue;
       }
     }
@@ -795,7 +809,7 @@
       if (rectCollide(p, player)) {
         if (p.type === 'shield') shieldTime = 6;
         else tripleTime = 8;
-        spawnParticles(p.x + p.w / 2, p.y + p.h / 2, p.type === 'shield' ? '#00d2ff' : '#ff66ff', 12);
+        spawnParticles(p.x + p.w / 2, p.y + p.h / 2, p.type === 'shield' ? '#a78bfa' : '#f472b6', 12);
         playSound('power');
         powerups.splice(i, 1);
       }
@@ -923,23 +937,23 @@
     // 1) Halo neon satu pass — tidak mencuci detail badan
     if (!ghost) {
       ctx.save();
-      ctx.shadowColor = 'rgba(0,210,255,0.9)';
+      ctx.shadowColor = 'rgba(168,85,247,0.9)';
       ctx.shadowBlur = 16;
-      ctx.fillStyle = 'rgba(0,190,255,0.3)';
+      ctx.fillStyle = 'rgba(168,85,247,0.3)';
       pathPoly([[0, -18], [5.5, -2], [20, 8.4], [17, 12], [6, 10.5], [3, 12.8],
                 [-3, 12.8], [-6, 10.5], [-17, 12], [-20, 8.4], [-5.5, -2]]);
       ctx.fill();
       ctx.restore();
     }
 
-    const edge = ghost ? 'rgba(150,235,255,0.75)' : 'rgba(120,225,255,0.95)';
-    const darkLine = ghost ? 'rgba(10,50,65,0.6)' : 'rgba(6,14,26,0.85)';
+    const edge = ghost ? 'rgba(190,160,255,0.8)' : 'rgba(196,150,255,0.95)';
+    const darkLine = ghost ? 'rgba(24,10,48,0.6)' : 'rgba(10,6,22,0.85)';
 
     // 2) Sayap utama
     const wing = ctx.createLinearGradient(0, -2, 0, 12);
-    wing.addColorStop(0, ghost ? '#2b7288' : '#5b7096');
-    wing.addColorStop(0.55, ghost ? '#1e5a70' : '#3c4c6b');
-    wing.addColorStop(1, ghost ? '#143b4a' : '#222c42');
+    wing.addColorStop(0, ghost ? '#4a3a78' : '#5a4f86');
+    wing.addColorStop(0.55, ghost ? '#33285a' : '#3d3260');
+    wing.addColorStop(1, ghost ? '#1e1738' : '#221a38');
     ctx.fillStyle = wing;
     ctx.strokeStyle = darkLine;
     ctx.lineWidth = 1;
@@ -949,12 +963,12 @@
     ctx.fill(); ctx.stroke();
 
     // Pantulan tepi depan sayap
-    ctx.strokeStyle = ghost ? 'rgba(170,240,255,0.45)' : 'rgba(180,240,255,0.75)';
+    ctx.strokeStyle = ghost ? 'rgba(200,170,255,0.45)' : 'rgba(216,180,254,0.8)';
     ctx.beginPath(); ctx.moveTo(4.8, -1.2); ctx.lineTo(20, 8.4); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(-4.8, -1.2); ctx.lineTo(-20, 8.4); ctx.stroke();
 
     // 3) Sayap belakang
-    ctx.fillStyle = ghost ? '#1d566b' : '#35435e';
+    ctx.fillStyle = ghost ? '#332a55' : '#37305a';
     ctx.strokeStyle = darkLine;
     pathPoly([[3.2, 5.8], [10.8, 11.9], [9.4, 13.2], [3.0, 9.6]]);
     ctx.fill(); ctx.stroke();
@@ -962,14 +976,14 @@
     ctx.fill(); ctx.stroke();
 
     // 4) Sirip ekor ganda
-    ctx.fillStyle = ghost ? '#276b80' : '#46587b';
+    ctx.fillStyle = ghost ? '#3d3568' : '#4b3f78';
     pathPoly([[2.2, 3.0], [5.2, 12.6], [3.3, 13.2], [0.8, 4.4]]);
     ctx.fill(); ctx.stroke();
     pathPoly([[-2.2, 3.0], [-5.2, 12.6], [-3.3, 13.2], [-0.8, 4.4]]);
     ctx.fill(); ctx.stroke();
 
     // 5) Peluru kendali sayap
-    ctx.fillStyle = ghost ? '#3d8299' : '#8fa3c0';
+    ctx.fillStyle = ghost ? '#5a4a86' : '#b6a6d8';
     ctx.fillRect(-16.8, 7.0, 1.8, 4.4);
     ctx.fillRect(15.0, 7.0, 1.8, 4.4);
     ctx.fillStyle = ghost ? '#7a3040' : '#ff5a5a';
@@ -978,11 +992,11 @@
 
     // 6) Badan pesawat (gradasi logam)
     const body = ctx.createLinearGradient(-5, 0, 5, 0);
-    body.addColorStop(0, ghost ? '#1d566d' : '#3b4a66');
-    body.addColorStop(0.34, ghost ? '#3f93ac' : '#9fb3d4');
-    body.addColorStop(0.5, ghost ? '#6cc3d8' : '#e8f2ff');
-    body.addColorStop(0.66, ghost ? '#3f93ac' : '#9fb3d4');
-    body.addColorStop(1, ghost ? '#1d566d' : '#3b4a66');
+    body.addColorStop(0, ghost ? '#3a2f66' : '#3b3357');
+    body.addColorStop(0.34, ghost ? '#6a54a8' : '#a99ecf');
+    body.addColorStop(0.5, ghost ? '#9a7fd6' : '#f0e9ff');
+    body.addColorStop(0.66, ghost ? '#6a54a8' : '#a99ecf');
+    body.addColorStop(1, ghost ? '#3a2f66' : '#3b3357');
     ctx.fillStyle = body;
     ctx.strokeStyle = edge;
     ctx.lineWidth = 1.1;
@@ -993,29 +1007,29 @@
 
     // 7) Radome hidung
     const nose = ctx.createLinearGradient(-2.6, -18, 2.6, -13);
-    nose.addColorStop(0, ghost ? '#3f93ac' : '#8ea3bf');
-    nose.addColorStop(1, ghost ? '#276b80' : '#4a5c78');
+    nose.addColorStop(0, ghost ? '#6a54a8' : '#a99ecf');
+    nose.addColorStop(1, ghost ? '#4a3a78' : '#5a4a7e');
     ctx.fillStyle = nose;
     pathPoly([[0, -18], [2.6, -13.5], [-2.6, -13.5]]);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(180,240,255,0.55)';
+    ctx.strokeStyle = 'rgba(216,180,254,0.6)';
     ctx.beginPath(); ctx.moveTo(0, -17.5); ctx.lineTo(0, -13.8); ctx.stroke();
 
     // 8) Kanopi kokpit
     const glass = ctx.createLinearGradient(0, -9.6, 0, 1.6);
-    glass.addColorStop(0, ghost ? '#dffcff' : '#f0ffff');
-    glass.addColorStop(0.4, '#4fd2ec');
-    glass.addColorStop(1, '#07303f');
+    glass.addColorStop(0, '#f3ecff');
+    glass.addColorStop(0.4, '#a78bfa');
+    glass.addColorStop(1, '#1a0f3d');
     ctx.fillStyle = glass;
     ctx.beginPath(); ctx.ellipse(0, -4.2, 3.0, 5.4, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = 'rgba(200,250,255,0.9)';
+    ctx.strokeStyle = 'rgba(230,210,255,0.9)';
     ctx.lineWidth = 0.8;
     ctx.stroke();
     ctx.fillStyle = 'rgba(255,255,255,0.75)';
     ctx.beginPath(); ctx.ellipse(-0.9, -6.0, 0.8, 2.1, -0.25, 0, Math.PI * 2); ctx.fill();
 
     // 9) Intake udara
-    ctx.fillStyle = ghost ? '#0f3945' : '#141c2b';
+    ctx.fillStyle = ghost ? '#241a3e' : '#1a1230';
     ctx.fillRect(-5.0, 0.4, 1.4, 4.4);
     ctx.fillRect(3.6, 0.4, 1.4, 4.4);
 
@@ -1035,7 +1049,7 @@
         flame.addColorStop(0, 'rgba(255,255,235,0.95)');
         flame.addColorStop(0.3, 'rgba(255,190,70,0.9)');
         flame.addColorStop(0.7, 'rgba(255,90,40,0.55)');
-        flame.addColorStop(1, 'rgba(0,210,255,0)');
+        flame.addColorStop(1, 'rgba(192,132,252,0)');
         ctx.fillStyle = flame;
         ctx.beginPath();
         ctx.moveTo(nx - 2.2, 12.4);
@@ -1060,18 +1074,39 @@
   }
 
   function drawPlayer() {
-    drawFighter(player.x, player.y, bankAngle, false);
+    if (ghostEnabled) {
+      ctx.save();
+      ctx.globalAlpha = 0.62;
+      drawFighter(player.x, player.y, bankAngle, false);
+      ctx.restore();
+    } else {
+      drawFighter(player.x, player.y, bankAngle, false);
+    }
+
+    const cx = player.x + PLAYER_W / 2;
+    const cy = player.y + PLAYER_H / 2;
+
+    if (ghostEnabled) {
+      const aura = (0.35 + 0.25 * Math.sin(time * 6)).toFixed(2);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(216,180,254,' + aura + ')';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(cx, cy, PLAYER_W * 0.8, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
 
     if (shieldTime > 0) {
-      const cx = player.x + PLAYER_W / 2;
       const pulse = 0.55 + 0.25 * Math.sin(time * 8);
       ctx.save();
-      ctx.strokeStyle = 'rgba(0,210,255,' + pulse + ')';
+      ctx.strokeStyle = 'rgba(192,132,252,' + pulse + ')';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(cx, player.y + PLAYER_H / 2, PLAYER_W * 0.78, 0, Math.PI * 2);
+      ctx.arc(cx, cy, PLAYER_W * 0.78, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.fillStyle = 'rgba(0,210,255,0.08)';
+      ctx.fillStyle = 'rgba(192,132,252,0.08)';
       ctx.fill();
       ctx.restore();
     }
@@ -1084,7 +1119,7 @@
     for (let i = 0; i < ghostBullets.length; i++) {
       const gb = ghostBullets[i];
       ctx.globalAlpha = 0.3 * ghostAlpha * Math.min(1, gb.life * 2);
-      ctx.fillStyle = '#9fe8ff';
+      ctx.fillStyle = '#d8b4fe';
       ctx.fillRect(gb.x, gb.y, BULLET_W, BULLET_H);
     }
     ctx.restore();
@@ -1096,11 +1131,11 @@
 
     ctx.save();
     ctx.globalAlpha = 0.6 * ghostAlpha;
-    ctx.fillStyle = '#9fe8ff';
+    ctx.fillStyle = '#d8b4fe';
     ctx.font = 'bold 8px Segoe UI, sans-serif';
     ctx.textAlign = 'center';
     const labelX = Math.max(34, Math.min(CANVAS_W - 34, ghostX + PLAYER_W / 2));
-    ctx.fillText('GHOST ' + Math.round(Number(ghostData.score) || 0),
+    ctx.fillText('REPLAY ' + Math.round(Number(ghostData.score) || 0),
       labelX, player.y - 24);
     ctx.restore();
     ctx.textAlign = 'start';
@@ -1117,45 +1152,78 @@
 
   function drawAlien(a) {
     const cx = a.x + a.w / 2;
-    if (a.type === 'ufo') {
-      ctx.save();
-      ctx.shadowColor = '#ffcc00';
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = '#ffcc00';
-      ctx.beginPath();
-      ctx.ellipse(cx, a.y + a.h * 0.68, a.w / 2, a.h * 0.34, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
+    const cy = a.y + a.h / 2 + Math.sin(time * 3 + a.phase) * 1.2;
 
-      ctx.fillStyle = '#ff5555';
-      ctx.beginPath();
-      ctx.ellipse(cx, a.y + a.h * 0.42, a.w * 0.32, a.h * 0.34, 0, Math.PI, Math.PI * 2);
-      ctx.fill();
+    ctx.save();
+    ctx.translate(cx, cy);
 
-      ctx.fillStyle = '#00d2ff';
-      ctx.fillRect(cx - 2, a.y + a.h * 0.2, 4, 4);
-      return;
-    }
+    // Cahaya ungu di sekeliling piringan
+    ctx.shadowColor = 'rgba(255,110,220,0.75)';
+    ctx.shadowBlur = 12;
 
-    ctx.fillStyle = '#ff4444';
+    // Badan piringan (saucer)
+    const rim = ctx.createLinearGradient(0, -a.h * 0.45, 0, a.h * 0.5);
+    rim.addColorStop(0, '#e2b6ff');
+    rim.addColorStop(0.45, '#a855f7');
+    rim.addColorStop(1, '#3a0f52');
+    ctx.fillStyle = rim;
     ctx.beginPath();
-    ctx.moveTo(cx, a.y);
-    ctx.lineTo(a.x + a.w, a.y + a.h);
-    ctx.lineTo(a.x, a.y + a.h);
-    ctx.closePath();
+    ctx.ellipse(0, 0, a.w / 2, a.h * 0.34, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+
+    ctx.shadowBlur = 0;
+
+    // Garis rim
+    ctx.strokeStyle = 'rgba(240,200,255,0.7)';
     ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, a.w / 2 - 2, a.h * 0.28, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(cx - 2, a.y + a.h * 0.35, 4, 4);
+    // Kubah kaca
+    const dome = ctx.createLinearGradient(0, -a.h * 0.75, 0, 0);
+    dome.addColorStop(0, 'rgba(235,210,255,0.95)');
+    dome.addColorStop(0.5, 'rgba(170,90,240,0.85)');
+    dome.addColorStop(1, 'rgba(90,30,140,0.55)');
+    ctx.fillStyle = dome;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, a.w * 0.26, a.h * 0.5, 0, Math.PI, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(220,180,255,0.8)';
+    ctx.stroke();
+
+    // Pantulan kubah
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.beginPath();
+    ctx.ellipse(-a.w * 0.07, -a.h * 0.2, a.w * 0.05, a.h * 0.12, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Lampu-lampu rim
+    for (let i = -3; i <= 3; i++) {
+      const lx = i * a.w * 0.12;
+      const ly = a.h * 0.2;
+      const pulse = 0.35 + 0.65 * Math.abs(Math.sin(time * 5 + i * 0.9 + a.phase));
+      ctx.fillStyle = (i % 2 === 0 ? 'rgba(255,140,230,' : 'rgba(200,170,255,') +
+        pulse.toFixed(2) + ')';
+      ctx.beginPath();
+      ctx.arc(lx, ly, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Inti energi
+    ctx.fillStyle = 'rgba(255,220,255,' +
+      (0.5 + 0.4 * Math.sin(time * 6 + a.phase)).toFixed(2) + ')';
+    ctx.beginPath();
+    ctx.arc(0, -a.h * 0.05, 2.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
   }
 
   function drawPowerup(p) {
     const cx = p.x + p.w / 2;
     const cy = p.y + p.h / 2;
-    const color = p.type === 'shield' ? '#00d2ff' : '#ff66ff';
+    const color = p.type === 'shield' ? '#a78bfa' : '#f472b6';
 
     ctx.save();
     ctx.translate(cx, cy);
@@ -1192,13 +1260,13 @@
     ctx.save();
     ctx.globalAlpha = Math.min(1, waveBanner);
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#00d2ff';
+    ctx.fillStyle = '#c084fc';
     ctx.font = 'bold 30px Segoe UI, sans-serif';
-    ctx.shadowColor = '#00d2ff';
+    ctx.shadowColor = '#a855f7';
     ctx.shadowBlur = 18;
     ctx.fillText('WAVE ' + wave, CANVAS_W / 2, CANVAS_H * 0.4);
     ctx.shadowBlur = 0;
-    ctx.fillStyle = '#9fe8ff';
+    ctx.fillStyle = '#e9d5ff';
     ctx.font = '13px Segoe UI, sans-serif';
     ctx.fillText('Musuh makin cepat!', CANVAS_W / 2, CANVAS_H * 0.4 + 24);
     ctx.restore();
