@@ -66,6 +66,11 @@
     .leaderboard-table tr.new-row td { background: rgba(0,210,255,0.18); color: #fff; font-weight: bold; }
     .empty-msg { display: none; font-size: 11px; color: #666; margin: 6px 0; }
     .hint { font-size: 11px; color: #7a7a99; margin-top: 12px; margin-bottom: 0; }
+    .ghost-info {
+      font-size: 11px; color: #7fe9ff; margin: 4px 0 0; padding: 6px 8px;
+      border: 1px dashed rgba(0,210,255,0.35); border-radius: 6px;
+      background: rgba(0,210,255,0.06); letter-spacing: 0.5px; }
+    .icon-btn.off { opacity: 0.5; }
     .record-badge {
       display: inline-block; margin-top: 4px; padding: 4px 10px; border-radius: 999px;
       background: rgba(255,204,0,0.15); border: 1px solid #ffcc00; color: #ffcc00;
@@ -114,6 +119,7 @@
       <span class="stat status" id="hudStatus"></span>
     </div>
     <div class="hud-actions">
+      <button id="btnGhost" class="icon-btn" type="button">GHOST: ON</button>
       <button id="btnMute" class="icon-btn" type="button">SFX: ON</button>
       <button id="btnPause" class="icon-btn hidden" type="button">PAUSE</button>
     </div>
@@ -135,6 +141,7 @@
           <tbody></tbody>
         </table>
         <p class="empty-msg">Belum ada skor. Jadilah yang pertama!</p>
+        <p id="ghostInfo" class="ghost-info"></p>
         <p class="hint">Kontrol: &larr; &rarr; / A D untuk bergerak &middot; SPACE untuk menembak &middot; P / ESC untuk pause</p>
       </div>
     </div>
@@ -208,6 +215,9 @@
   const INITIAL_ALIEN_SPEED = 1.8;
   const MAX_ALIEN_SPEED = 5.5;
   const SHOOT_COOLDOWN = 0.15;
+  const GHOST_KEY = 'arcade_ghost_v1';
+  const GHOST_SAMPLE_DT = 0.1;
+  const GHOST_MAX_SAMPLES = 3600;
 
   const BG_GRADIENT = ctx.createRadialGradient(
     CANVAS_W / 2, CANVAS_H * 0.12, 20,
@@ -302,6 +312,9 @@
     if (e.code === 'KeyM') {
       toggleMute();
     }
+    if (e.code === 'KeyG') {
+      toggleGhost();
+    }
   });
   window.addEventListener('keyup', e => { keys[e.code] = false; });
 
@@ -328,6 +341,19 @@
   let particles = [];
   let powerups = [];
 
+  /* GHOST REPLAY STATE */
+  let ghostBullets = [];
+  let recording = [];
+  let runTime = 0;
+  let ghostPlayIdx = 0;
+  let ghostX = null;
+  let ghostVisible = false;
+  let ghostAlpha = 1;
+  let ghostShootTimer = 0;
+  let bankAngle = 0;
+  let ghostData = loadGhost();
+  let ghostEnabled = localStorage.getItem('arcade_ghost_enabled') !== '0';
+
   let currentUsername = localStorage.getItem('arcade_last_username') || '';
 
   const inpUsername = document.getElementById('inpUsername');
@@ -351,6 +377,8 @@
   const btnMenuFromPause = document.getElementById('btnMenuFromPause');
   const btnMute = document.getElementById('btnMute');
   const btnPause = document.getElementById('btnPause');
+  const btnGhost = document.getElementById('btnGhost');
+  const ghostInfo = document.getElementById('ghostInfo');
 
   function resetPlayer() {
     player.x = CANVAS_W / 2 - PLAYER_W / 2;
@@ -426,6 +454,96 @@
     });
   }
 
+  /* GHOST REPLAY — rekam gerak + tembakan run terbaik, lalu putar ulang */
+  function loadGhost() {
+    try {
+      const raw = localStorage.getItem(GHOST_KEY);
+      if (!raw) return null;
+      const g = JSON.parse(raw);
+      if (!g || !Array.isArray(g.samples) || g.samples.length < 2) return null;
+      return g;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveGhost() {
+    if (score <= 0 || runTime < 0.5 || recording.length < 3) return;
+    if (ghostData && score <= Number(ghostData.score || 0)) return;
+    const g = {
+      v: 1,
+      name: currentUsername || 'Pemain',
+      score: score,
+      wave: wave,
+      duration: Math.round(runTime * 100) / 100,
+      samples: recording
+    };
+    try {
+      localStorage.setItem(GHOST_KEY, JSON.stringify(g));
+      ghostData = g;
+    } catch (e) {
+      /* kuota localStorage penuh — ghost dilewati, game tetap jalan */
+    }
+  }
+
+  function toggleGhost() {
+    ghostEnabled = !ghostEnabled;
+    localStorage.setItem('arcade_ghost_enabled', ghostEnabled ? '1' : '0');
+    updateGhostUI();
+  }
+
+  function updateGhostUI() {
+    if (!btnGhost) return;
+    btnGhost.textContent = ghostEnabled ? 'GHOST: ON' : 'GHOST: OFF';
+    btnGhost.classList.toggle('off', !ghostEnabled);
+    if (!ghostInfo) return;
+    if (ghostData && ghostData.samples) {
+      ghostInfo.textContent = 'Ghost terbaik: ' + ghostData.name + ' — ' +
+        Number(ghostData.score || 0).toLocaleString('id-ID') +
+        ' (wave ' + (ghostData.wave || 1) + ')';
+    } else {
+      ghostInfo.textContent = 'Belum ada ghost — skor terbaikmu akan direkam otomatis.';
+    }
+  }
+
+  function updateGhost(dt) {
+    ghostVisible = false;
+    const g = ghostData;
+    if (!ghostEnabled || !g || !g.samples || g.samples.length < 2) return;
+    if (runTime > g.duration + 2.5) return;
+
+    while (ghostPlayIdx < g.samples.length - 2 && g.samples[ghostPlayIdx + 1][0] <= runTime) {
+      ghostPlayIdx++;
+    }
+    const a = g.samples[ghostPlayIdx];
+    const b = g.samples[Math.min(ghostPlayIdx + 1, g.samples.length - 1)];
+    const span = Math.max(0.0001, b[0] - a[0]);
+    const k = Math.min(1, Math.max(0, (runTime - a[0]) / span));
+
+    ghostX = a[1] + (b[1] - a[1]) * k;
+    ghostVisible = true;
+    ghostAlpha = runTime > g.duration ? Math.max(0, 1 - (runTime - g.duration) / 2.5) : 1;
+
+    const shooting = a[2] === 1 || b[2] === 1;
+    ghostShootTimer -= dt;
+    if (shooting && ghostShootTimer <= 0) {
+      ghostShootTimer = SHOOT_COOLDOWN;
+      if (ghostBullets.length < 10) {
+        ghostBullets.push({
+          x: ghostX + PLAYER_W / 2 - BULLET_W / 2,
+          y: player.y - 4,
+          life: 0.85
+        });
+      }
+    }
+    for (let i = ghostBullets.length - 1; i >= 0; i--) {
+      const gb = ghostBullets[i];
+      gb.y -= BULLET_SPEED * 60 * dt;
+      gb.life -= dt;
+      if (gb.life <= 0 || gb.y + BULLET_H < 0) ghostBullets.splice(i, 1);
+    }
+  }
+
   function startGame() {
     initAudio();
     playSound('start');
@@ -446,6 +564,15 @@
     aliens = [];
     particles = [];
     powerups = [];
+    ghostBullets = [];
+    recording = [];
+    runTime = 0;
+    ghostPlayIdx = 0;
+    ghostX = null;
+    ghostVisible = false;
+    ghostAlpha = 1;
+    ghostShootTimer = 0;
+    bankAngle = 0;
     resetPlayer();
     localStorage.setItem('arcade_last_username', currentUsername);
     gameState = STATE.PLAYING;
@@ -465,6 +592,8 @@
     const prevBest = getBestScore();
     newRecord = score > prevBest && score > 0;
     saveScoreToLeaderboard();
+    saveGhost();
+    updateGhostUI();
     goScore.textContent = score;
     goRecord.classList.toggle('hidden', !newRecord);
     renderLeaderboard('goLeaderboard');
@@ -548,6 +677,7 @@
     if (gameState !== STATE.PLAYING) return;
 
     const s = Math.min(dt * 60, 3);
+    runTime += dt;
 
     let moveX = 0;
     if (keys['ArrowLeft'] || keys['KeyA'] || touchLeft) moveX -= player.speed;
@@ -555,6 +685,26 @@
     player.x += moveX * s;
     if (player.x < 0) player.x = 0;
     if (player.x + PLAYER_W > CANVAS_W) player.x = CANVAS_W - PLAYER_W;
+
+    const bankTarget = moveX > 0 ? 0.2 : (moveX < 0 ? -0.2 : 0);
+    bankAngle += (bankTarget - bankAngle) * Math.min(1, dt * 10);
+
+    if (particles.length < 350) {
+      for (let side = -1; side <= 1; side += 2) {
+        if (Math.random() < 0.5) {
+          particles.push({
+            x: player.x + PLAYER_W / 2 + side * 3.4,
+            y: player.y + PLAYER_H + 4,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: 1.6 + Math.random() * 2.0,
+            life: 0.5,
+            decay: 0.06,
+            size: 1.6,
+            color: Math.random() < 0.5 ? '#ff9a33' : '#ffd27f'
+          });
+        }
+      }
+    }
 
     shieldTime = Math.max(0, shieldTime - dt);
     tripleTime = Math.max(0, tripleTime - dt);
@@ -564,6 +714,19 @@
       fire();
       shootCooldown = SHOOT_COOLDOWN;
     }
+
+    const shootingNow = (keys['Space'] || touchShoot) ? 1 : 0;
+    if (recording.length < GHOST_MAX_SAMPLES) {
+      const lastT = recording.length ? recording[recording.length - 1][0] : -1;
+      if (runTime - lastT >= GHOST_SAMPLE_DT) {
+        recording.push([
+          Math.round(runTime * 100) / 100,
+          Math.round(player.x * 10) / 10,
+          shootingNow
+        ]);
+      }
+    }
+    updateGhost(dt);
 
     for (let i = bullets.length - 1; i >= 0; i--) {
       const b = bullets[i];
@@ -741,34 +904,166 @@
     ctx.globalAlpha = 1;
   }
 
-  function drawPlayer() {
-    const cx = player.x + PLAYER_W / 2;
-    const flick = 4 + Math.abs(Math.sin(time * 18)) * 7;
-
-    ctx.fillStyle = '#ff9a33';
+  function pathPoly(pts) {
     ctx.beginPath();
-    ctx.moveTo(cx - 5, player.y + PLAYER_H);
-    ctx.lineTo(cx, player.y + PLAYER_H + flick);
-    ctx.lineTo(cx + 5, player.y + PLAYER_H);
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
     ctx.closePath();
-    ctx.fill();
+  }
+
+  /* Pesawat tempur: badan ramping, sayap swept, kanopi, afterburner, lampu navigasi */
+  function drawFighter(bx, by, bank, ghost) {
+    const cx = bx + PLAYER_W / 2;
+    const cy = by + PLAYER_H / 2;
 
     ctx.save();
-    ctx.shadowColor = '#00d2ff';
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = '#00d2ff';
-    ctx.beginPath();
-    ctx.moveTo(cx, player.y);
-    ctx.lineTo(player.x + PLAYER_W, player.y + PLAYER_H);
-    ctx.lineTo(player.x, player.y + PLAYER_H);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+    ctx.translate(cx, cy);
+    ctx.rotate(bank || 0);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(cx - 4, player.y + PLAYER_H - 10, 8, 6);
+    // 1) Halo neon satu pass — tidak mencuci detail badan
+    if (!ghost) {
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,210,255,0.9)';
+      ctx.shadowBlur = 16;
+      ctx.fillStyle = 'rgba(0,190,255,0.3)';
+      pathPoly([[0, -18], [5.5, -2], [20, 8.4], [17, 12], [6, 10.5], [3, 12.8],
+                [-3, 12.8], [-6, 10.5], [-17, 12], [-20, 8.4], [-5.5, -2]]);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    const edge = ghost ? 'rgba(150,235,255,0.75)' : 'rgba(120,225,255,0.95)';
+    const darkLine = ghost ? 'rgba(10,50,65,0.6)' : 'rgba(6,14,26,0.85)';
+
+    // 2) Sayap utama
+    const wing = ctx.createLinearGradient(0, -2, 0, 12);
+    wing.addColorStop(0, ghost ? '#2b7288' : '#5b7096');
+    wing.addColorStop(0.55, ghost ? '#1e5a70' : '#3c4c6b');
+    wing.addColorStop(1, ghost ? '#143b4a' : '#222c42');
+    ctx.fillStyle = wing;
+    ctx.strokeStyle = darkLine;
+    ctx.lineWidth = 1;
+    pathPoly([[4.8, -1.2], [20, 8.4], [17.4, 11.5], [4.8, 7.6]]);
+    ctx.fill(); ctx.stroke();
+    pathPoly([[-4.8, -1.2], [-20, 8.4], [-17.4, 11.5], [-4.8, 7.6]]);
+    ctx.fill(); ctx.stroke();
+
+    // Pantulan tepi depan sayap
+    ctx.strokeStyle = ghost ? 'rgba(170,240,255,0.45)' : 'rgba(180,240,255,0.75)';
+    ctx.beginPath(); ctx.moveTo(4.8, -1.2); ctx.lineTo(20, 8.4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-4.8, -1.2); ctx.lineTo(-20, 8.4); ctx.stroke();
+
+    // 3) Sayap belakang
+    ctx.fillStyle = ghost ? '#1d566b' : '#35435e';
+    ctx.strokeStyle = darkLine;
+    pathPoly([[3.2, 5.8], [10.8, 11.9], [9.4, 13.2], [3.0, 9.6]]);
+    ctx.fill(); ctx.stroke();
+    pathPoly([[-3.2, 5.8], [-10.8, 11.9], [-9.4, 13.2], [-3.0, 9.6]]);
+    ctx.fill(); ctx.stroke();
+
+    // 4) Sirip ekor ganda
+    ctx.fillStyle = ghost ? '#276b80' : '#46587b';
+    pathPoly([[2.2, 3.0], [5.2, 12.6], [3.3, 13.2], [0.8, 4.4]]);
+    ctx.fill(); ctx.stroke();
+    pathPoly([[-2.2, 3.0], [-5.2, 12.6], [-3.3, 13.2], [-0.8, 4.4]]);
+    ctx.fill(); ctx.stroke();
+
+    // 5) Peluru kendali sayap
+    ctx.fillStyle = ghost ? '#3d8299' : '#8fa3c0';
+    ctx.fillRect(-16.8, 7.0, 1.8, 4.4);
+    ctx.fillRect(15.0, 7.0, 1.8, 4.4);
+    ctx.fillStyle = ghost ? '#7a3040' : '#ff5a5a';
+    ctx.fillRect(-16.8, 6.2, 1.8, 1.0);
+    ctx.fillRect(15.0, 6.2, 1.8, 1.0);
+
+    // 6) Badan pesawat (gradasi logam)
+    const body = ctx.createLinearGradient(-5, 0, 5, 0);
+    body.addColorStop(0, ghost ? '#1d566d' : '#3b4a66');
+    body.addColorStop(0.34, ghost ? '#3f93ac' : '#9fb3d4');
+    body.addColorStop(0.5, ghost ? '#6cc3d8' : '#e8f2ff');
+    body.addColorStop(0.66, ghost ? '#3f93ac' : '#9fb3d4');
+    body.addColorStop(1, ghost ? '#1d566d' : '#3b4a66');
+    ctx.fillStyle = body;
+    ctx.strokeStyle = edge;
+    ctx.lineWidth = 1.1;
+    pathPoly([[0, -18], [2.6, -13.5], [4.2, -7], [5.0, -1], [5.0, 1], [4.6, 7],
+              [3.0, 11.5], [2.4, 12.8], [-2.4, 12.8], [-3.0, 11.5], [-4.6, 7],
+              [-5.0, 1], [-5.0, -1], [-4.2, -7], [-2.6, -13.5]]);
+    ctx.fill(); ctx.stroke();
+
+    // 7) Radome hidung
+    const nose = ctx.createLinearGradient(-2.6, -18, 2.6, -13);
+    nose.addColorStop(0, ghost ? '#3f93ac' : '#8ea3bf');
+    nose.addColorStop(1, ghost ? '#276b80' : '#4a5c78');
+    ctx.fillStyle = nose;
+    pathPoly([[0, -18], [2.6, -13.5], [-2.6, -13.5]]);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(180,240,255,0.55)';
+    ctx.beginPath(); ctx.moveTo(0, -17.5); ctx.lineTo(0, -13.8); ctx.stroke();
+
+    // 8) Kanopi kokpit
+    const glass = ctx.createLinearGradient(0, -9.6, 0, 1.6);
+    glass.addColorStop(0, ghost ? '#dffcff' : '#f0ffff');
+    glass.addColorStop(0.4, '#4fd2ec');
+    glass.addColorStop(1, '#07303f');
+    ctx.fillStyle = glass;
+    ctx.beginPath(); ctx.ellipse(0, -4.2, 3.0, 5.4, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(200,250,255,0.9)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.beginPath(); ctx.ellipse(-0.9, -6.0, 0.8, 2.1, -0.25, 0, Math.PI * 2); ctx.fill();
+
+    // 9) Intake udara
+    ctx.fillStyle = ghost ? '#0f3945' : '#141c2b';
+    ctx.fillRect(-5.0, 0.4, 1.4, 4.4);
+    ctx.fillRect(3.6, 0.4, 1.4, 4.4);
+
+    // 10) Nozzle mesin
+    ctx.fillStyle = '#12181f';
+    ctx.beginPath(); ctx.arc(-3.0, 11.4, 2.0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(3.0, 11.4, 2.0, 0, Math.PI * 2); ctx.fill();
+
+    // 11) Afterburner — digambar setelah badan agar terlihat
+    if (!ghost) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      for (let side = -1; side <= 1; side += 2) {
+        const nx = side * 3.0;
+        const len = 8 + Math.abs(Math.sin(time * 24 + side * 1.7)) * 9;
+        const flame = ctx.createLinearGradient(nx, 12.4, nx, 12.4 + len);
+        flame.addColorStop(0, 'rgba(255,255,235,0.95)');
+        flame.addColorStop(0.3, 'rgba(255,190,70,0.9)');
+        flame.addColorStop(0.7, 'rgba(255,90,40,0.55)');
+        flame.addColorStop(1, 'rgba(0,210,255,0)');
+        ctx.fillStyle = flame;
+        ctx.beginPath();
+        ctx.moveTo(nx - 2.2, 12.4);
+        ctx.lineTo(nx, 12.4 + len);
+        ctx.lineTo(nx + 2.2, 12.4);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // 12) Lampu navigasi berkedip (merah kiri, hijau kanan)
+    if (!ghost) {
+      const blink = (0.45 + 0.45 * Math.sin(time * 7)).toFixed(2);
+      ctx.fillStyle = 'rgba(255,70,70,' + blink + ')';
+      ctx.beginPath(); ctx.arc(-19.2, 8.8, 1.1, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(70,255,150,' + blink + ')';
+      ctx.beginPath(); ctx.arc(19.2, 8.8, 1.1, 0, Math.PI * 2); ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  function drawPlayer() {
+    drawFighter(player.x, player.y, bankAngle, false);
 
     if (shieldTime > 0) {
+      const cx = player.x + PLAYER_W / 2;
       const pulse = 0.55 + 0.25 * Math.sin(time * 8);
       ctx.save();
       ctx.strokeStyle = 'rgba(0,210,255,' + pulse + ')';
@@ -780,6 +1075,35 @@
       ctx.fill();
       ctx.restore();
     }
+  }
+
+  function drawGhost() {
+    if (!ghostVisible || ghostX === null || !ghostData) return;
+
+    ctx.save();
+    for (let i = 0; i < ghostBullets.length; i++) {
+      const gb = ghostBullets[i];
+      ctx.globalAlpha = 0.3 * ghostAlpha * Math.min(1, gb.life * 2);
+      ctx.fillStyle = '#9fe8ff';
+      ctx.fillRect(gb.x, gb.y, BULLET_W, BULLET_H);
+    }
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalAlpha = 0.4 * ghostAlpha;
+    drawFighter(ghostX, player.y, 0, true);
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalAlpha = 0.6 * ghostAlpha;
+    ctx.fillStyle = '#9fe8ff';
+    ctx.font = 'bold 8px Segoe UI, sans-serif';
+    ctx.textAlign = 'center';
+    const labelX = Math.max(34, Math.min(CANVAS_W - 34, ghostX + PLAYER_W / 2));
+    ctx.fillText('GHOST ' + Math.round(Number(ghostData.score) || 0),
+      labelX, player.y - 24);
+    ctx.restore();
+    ctx.textAlign = 'start';
   }
 
   function drawBullet(b) {
@@ -857,7 +1181,7 @@
       ctx.globalAlpha = Math.max(0, p.life);
       ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.size || 3, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
@@ -891,6 +1215,7 @@
     }
 
     if (gameState === STATE.PLAYING) {
+      drawGhost();
       powerups.forEach(drawPowerup);
       aliens.forEach(drawAlien);
       bullets.forEach(drawBullet);
@@ -944,6 +1269,7 @@
   btnMute.textContent = muted ? 'SFX: OFF' : 'SFX: ON';
   btnMute.addEventListener('click', toggleMute);
   btnPause.addEventListener('click', pauseGame);
+  btnGhost.addEventListener('click', toggleGhost);
 
   inpUsername.addEventListener('input', () => {
     if (validateUsername(inpUsername.value)) {
@@ -1008,6 +1334,7 @@
   });
 
   renderLeaderboard('menuLeaderboard');
+  updateGhostUI();
   </script>
 </body>
 </html>

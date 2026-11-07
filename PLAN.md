@@ -11,7 +11,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 - **Format**: Single-File HTML (`index.html`) tanpa dependensi eksternal
 - **Platform**: Web Browser (Desktop & Mobile Responsive)
 - **Audio**: Web Audio API Sintetis (dapat dimatikan, tersimpan di `arcade_muted`)
-- **Penyimpanan**: LocalStorage (`arcade_leaderboard`, `arcade_last_username`, `arcade_muted`)
+- **Penyimpanan**: LocalStorage (`arcade_leaderboard`, `arcade_last_username`, `arcade_muted`, `arcade_ghost_v1`, `arcade_ghost_enabled`)
 - **Kebijakan Caching**: Zero-Cache (`no-cache, no-store, must-revalidate`)
 - **Deployment**: GitHub Pages (Branch `main`, path `/`)
 
@@ -67,6 +67,16 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 - [x] Tampilkan Rekor (best score) di HUD, highlight skor baru, dan badge "Rekor Baru".
 - [ ] Iterasi berikutnya (ide siswa): boss wave, combo multiplier, atau tema visual baru.
 
+### Phase 7: Ghost Replay & Pesawat Tempur (v0.6.0)
+- [x] Rekam gerak pemain + status tembakan run terbaik (sampel 10×/detik) selama bermain.
+- [x] Simpan ghost ke `arcade_ghost_v1` hanya jika skor run baru mengalahkan ghost sebelumnya.
+- [x] Putar ulang ghost sebagai jet transparan + label `GHOST <skor>` selama run berikutnya.
+- [x] Toggle ghost lewat tombol HUD atau tombol `G`, preferensi disimpan di `arcade_ghost_enabled`.
+- [x] Tampilkan info ghost terbaik (nama, skor, wave) di menu utama.
+- [x] Desain ulang pemain menjadi jet tempur: badan logam, sayap swept, kanopi, rudal, afterburner, lampu navigasi.
+- [x] Efek *banking* saat bermanuver, trail mesin, dan partikel asap/nyala.
+- [x] Uji replay lintas reload browser (LocalStorage) dan pastikan tidak ada error runtime.
+
 ---
 
 ## 3. Matriks Tugas & Status Pelaksanaan
@@ -87,6 +97,8 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 | **T-11** | Sistem Wave & peningkatan kesulitan | Phase 6 | `DONE` | AI | Tiap 10 kill, banner + speed naik |
 | **T-12** | Pause (tombol/P/ESC/auto) & toggle SFX | Phase 6 | `DONE` | AI | Preferensi mute tersimpan |
 | **T-13** | HUD Rekor, highlight skor baru & badge rekor | Phase 6 | `DONE` | AI | `getBestScore()` + `lastSavedId` |
+| **T-14** | Ghost replay (rekam, simpan, putar ulang run terbaik) | Phase 7 | `DONE` | AI | `arcade_ghost_v1`, sampel 10 Hz, toggle `G` |
+| **T-15** | Desain ulang pesawat tempur + efeks visual | Phase 7 | `DONE` | AI | Jet vektor, banking, afterburner, trail mesin |
 
 *Status: `TODO` | `IN-PROGRESS` | `DONE`*
 
@@ -96,6 +108,7 @@ Dokumen ini adalah rencana kerja universal dan log perkembangan proyek pembuatan
 
 | Versi | Tanggal | Pelaksana | Ringkasan Perubahan | Referensi Commit |
 | :--- | :--- | :--- | :--- | :--- |
+| **v0.6.0** | 2026-11-07 | AI | Ghost replay (rekam & putar ulang run terbaik, simpan di `arcade_ghost_v1`, toggle `G`, info ghost di menu) dan desain ulang pemain menjadi jet tempur (sayap swept, kanopi, rudal, afterburner, lampu navigasi, banking, trail mesin) | *(commit ini)* |
 | **v0.5.0** | 2026-10-31 | AI | Perbaikan layout CSS, delta-time normalization, musuh UFO, power-up Shield & Triple Shot, sistem wave, pause (tombol/P/ESC/auto), toggle SFX, HUD rekor, highlight skor baru, dan badge REKOR BARU | *(commit ini)* |
 | **v0.4.0** | 2026-10-31 | AI | Deployment ke GitHub Pages: inisialisasi git, commit, push ke `ghinqonitaaz-prog/space-defender` (public), aktifkan GitHub Pages branch `main` path `/`, situs live di `https://ghinqonitaaz-prog.github.io/space-defender/` | `841e2ad` |
 | **v0.3.0** | 2026-10-24 | AI | Implementasi game **Space Defender** lengkap dalam `index.html`: 8 blok modular, Web Audio API, LocalStorage leaderboard, tombol sentuh mobile, partikel ledakan, dan loop utama | `551fc22` |
